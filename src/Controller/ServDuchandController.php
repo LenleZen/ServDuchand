@@ -17,4 +17,14 @@ class ServDuchandController extends AbstractController
             'controller_name' => 'ServDuchandController',
         ]);
     }
+
+    /**
+     * @Route("/serv/login", name="login")
+     */
+    public function login(): Response
+    {
+        return $this->render('serv_duchand/login.html.twig', [
+            'controller_name' => 'ServDuchandController',
+        ]);
+    }
 }
