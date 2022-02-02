@@ -5,6 +5,7 @@ namespace App\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\Request;
 
 class ServDuchandController extends AbstractController
 {
@@ -21,10 +22,20 @@ class ServDuchandController extends AbstractController
     /**
      * @Route("/serv/login", name="login")
      */
-    public function login(): Response
+    public function login(Request $request): Response
     {
+        //récupération des informations du formulaire
+        $login = $request->request->get("login");
+        $password = $request->request->get("password");
+        if ($login=="root" && $password=="toor")
+            $message = "vous avez réussi a vous connecter ✔️";
+         else
+            $message = "Pas le bon identifiant ou mot de passe ❌";
+
         return $this->render('serv_duchand/login.html.twig', [
-            'controller_name' => 'ServDuchandController',
+            'login' => $login,
+            'password' => $password,
+            'message' => $message,
         ]);
     }
 }
