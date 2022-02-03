@@ -6,6 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
+use Doctrine\ORM\EntityManagerInterface;
 
 class ServDuchandController extends AbstractController
 {
@@ -22,7 +23,7 @@ class ServDuchandController extends AbstractController
     /**
      * @Route("/serv/login", name="login")
      */
-    public function login(Request $request): Response
+    public function login(Request $request,EntityManagerInterface $manager): Response
     {
         //récupération des informations du formulaire
         $login = $request->request->get("login");
