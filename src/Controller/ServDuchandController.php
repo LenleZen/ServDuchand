@@ -29,15 +29,54 @@ class ServDuchandController extends AbstractController
         //récupération des informations du formulaire
         $login = $request->request->get("login");
         $password = $request->request->get("password");
-        if ($login=="root" && $password=="toor")
-            $message = "vous avez réussi a vous connecter ✔️";
-         else
-            $message = "Pas le bon identifiant ou mot de passe ❌";
-
+        $reponse = $manager -> getRepository(Utilisateur :: class) -> findOneBy(['login' => $login]);
+        if ($reponse==NULL)
+            $message = "L'identifiant n'existe pas❌";
+        else{
+            $hash = $reponse -> getPassword();
+            if (password_verify($password, $hash))
+                $message = "vous avez réussi a vous connecter ✔️";
+             else
+                $message = "Le mot de passe ne correspond pas❌";
+        }
         return $this->render('serv_duchand/login.html.twig', [
             'login' => $login,
             'password' => $password,
             'message' => $message,
         ]);
     }
+    /**
+     * @Route("/serv/nouvutil", name="Creation_Utilisateur")
+     */
+    public function nouvutil(): Response
+    {
+        return $this->render('serv_duchand/nouvutil.html.twig', [
+            'controller_name' => 'ServDuchandController',
+        ]);
+    }
+ 
+     /**
+     * @Route("/serv/inserutil", name="Insertion_Utilisateur")
+     */
+    public function inserutil(Request $request,EntityManagerInterface $manager): Response
+    {
+        $login = $request->request->get("login");
+        $password = $request->request->get("password");
+        $password = password_hash($password, PASSWORD_DEFAULT);
+        $monUtilisateur = new Utilisateur ();
+        $monUtilisateur -> setlogin($login);
+        $monUtilisateur -> setpassword($password);
+        $manager -> persist($monUtilisateur);
+        $manager -> flush ();
+        return $this->redirectToRoute ('Creation_Utilisateur'); 
+    }
+  
+    /**
+     * @Route("/serv/tableau", name="Tableau_Utilisateur")
+     */
+    public function tableau(Request $request,EntityManagerInterface $manager): Response
+    {
+        $mesUtilisateurs=$manager->getRepository(Utilisateur::class)->findAll();
+        return $this->render('serv_duchand/tableutil.html.twig',['lst_utilisateurs' => $mesUtilisateurs]);
+    }    
 }
