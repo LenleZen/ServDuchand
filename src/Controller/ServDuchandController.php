@@ -52,6 +52,7 @@ class ServDuchandController extends AbstractController
             'message' => $message,
         ]);
     }
+
     /**
      * @Route("/serv/nouvutil", name="Creation_Utilisateur")
      */
@@ -64,7 +65,7 @@ class ServDuchandController extends AbstractController
  
      /**
      * @Route("/serv/inserutil", name="Insertion_Utilisateur")
-     */
+     */ 
     public function inserutil(Request $request,EntityManagerInterface $manager): Response
     {
         $login = $request->request->get("login");
@@ -92,7 +93,7 @@ class ServDuchandController extends AbstractController
         }
     }  
     
-    /**
+/**
 * @Route("/supprimerUtilisateur/{id}",name="supprimer_Utilisateur")
 */
 public function supprimerUtilisateur(EntityManagerInterface $manager,Utilisateur $editutil): Response {
@@ -100,5 +101,28 @@ public function supprimerUtilisateur(EntityManagerInterface $manager,Utilisateur
     $manager->flush();
     // Affiche de nouveau la liste des utilisateurs
     return $this->redirectToRoute ('Tableau_Utilisateur');
+ }
+
+/**
+* @Route("/deconnexion",name="Deconnexion")
+*/
+public function deconnexion(SessionInterface $session): Response {
+    $session -> clear ();
+    return $this->redirectToRoute ('serv_duchand');
+ }
+
+
+/**
+* @Route("/ajoutfichier",name="AjoutFichier")
+*/
+public function ajoutfichier(): Response {
+    return $this->render ('serv_duchand/ajoutfich.html.twig');
+ }
+
+ /**
+* @Route("/listefichier",name="ListeFichier")
+*/
+public function listefichier(): Response {
+    return $this->render ('serv_duchand/listefich.html.twig');
  }
 }
